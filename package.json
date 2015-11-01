@@ -1,0 +1,38 @@
+{
+  "name": "postcss-cson-cssvars",
+  "description": "PostCSS plugin  that read cson file to variable",
+  "version": "0.0.1",
+  "author": {
+    "name": "nju33",
+    "email": "sski0155+npm@gmail.com",
+    "url": "http://nju33.work/"
+  },
+  "bugs": {
+    "url": "https://github.com/totora0155/postcss-cson-cssvars/issues"
+  },
+  "dependencies": {
+    "coffee-script": "^1.10.0",
+    "cson": "^3.0.2",
+    "postcss": "^5.0.10"
+  },
+  "devDependencies": {
+    "chai": "^3.4.0",
+    "mocha": "^2.3.3"
+  },
+  "homepage": "https://github.com/totora0155/postcss-cson-cssvars#readme",
+  "keywords": [
+    "cson",
+    "css",
+    "postcss",
+    "postcss-plugin"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:totora0155/postcss-cson-cssvars.git"
+  },
+  "scripts": {
+    "test": " mocha --compilers \"--compilers coffee:coffee-script/register\"  test/*"
+  }
+}
