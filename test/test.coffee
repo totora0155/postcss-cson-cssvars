@@ -23,8 +23,20 @@ describe 'postcss-cson-cssvars', ->
     result = postcss([plugin]).process(style)
     expect(result.css).to.equal(answer)
 
-  it 'expect replace variable variable', ->
+  it 'expect replace variable-variable', ->
     {style, plugin, answer} = set 'variable-variable'
+
+    result = postcss([plugin]).process(style)
+    expect(result.css).to.equal(answer)
+
+  it 'expect replace nest-variable', ->
+    {style, plugin, answer} = set 'nest-variable'
+
+    result = postcss([plugin]).process(style)
+    expect(result.css).to.equal(answer)
+
+  it 'expect replace nest-variable-variable', ->
+    {style, plugin, answer} = set 'nest-variable-variable'
 
     result = postcss([plugin]).process(style)
     expect(result.css).to.equal(answer)

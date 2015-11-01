@@ -16,11 +16,25 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
     catch e
       {}
 
+  followVar = (varname) ->
+    reNest = /[^\.]+/g
+    result = vars
+    while (key = reNest.exec varname)?
+      result = result[key]
+    result
+
   (css) ->
     css.replaceValues /\$([^;]+)/, {fast: '$'}, (m, varname) ->
-      value = vars[varname]
-      varVar = value.match(/\$([^;]+)/)?[1]
-      if vars[varVar]? then vars[varVar]
-      else if value? then vars[varname]
+      value = followVar varname
+
+      if /^\$/.test value
+        value = followVar value.match /[^\$]+/
+
+      value
+
+      # value = prop[varname]
+      # varVar = value.match(/\$([^;]+)/)?[1]
+      # if prop[varVar]? then prop[varVar]
+      # else if value? then prop[varname]
 
 module.exports = csonCssvars
