@@ -1,6 +1,7 @@
 fs            = require 'fs'
 path          = require 'path'
 CSON          = require 'cson'
+colors        = require 'colors'
 postcss       = require 'postcss'
 
 csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
@@ -17,24 +18,32 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
       {}
 
   followVar = (varname) ->
-    reNest = /[^\.]+/g
+    re = /[^\[\]\.]+/g
     result = vars
-    while (key = reNest.exec varname)?
-      result = result[key]
+
+    while (key = re.exec varname)?
+      result = result[key[0]]
+
+    if not result?
+      throw new ReferenceError """
+
+        \t#{varname} is not defined
+
+      """
+
     result
 
   (css) ->
     css.replaceValues /\$([^;]+)/, {fast: '$'}, (m, varname) ->
-      value = followVar varname
+      result = null
 
-      if /^\$/.test value
-        value = followVar value.match /[^\$]+/
+      try
+        result = followVar varname
+        if /^\$/.test result
+          result = followVar result[1..]
+      catch e
+        console.error e.toString()
 
-      value
-
-      # value = prop[varname]
-      # varVar = value.match(/\$([^;]+)/)?[1]
-      # if prop[varVar]? then prop[varVar]
-      # else if value? then prop[varname]
+      result
 
 module.exports = csonCssvars

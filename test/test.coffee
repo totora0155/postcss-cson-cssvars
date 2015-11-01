@@ -40,3 +40,17 @@ describe 'postcss-cson-cssvars', ->
 
     result = postcss([plugin]).process(style)
     expect(result.css).to.equal(answer)
+
+  it 'expect replace variable-array', ->
+    {style, plugin, answer} = set 'variable-array'
+
+    result = postcss([plugin]).process(style)
+    expect(result.css).to.equal(answer)
+
+  it 'expect replace undefined-value', ->
+    {style, plugin, answer} = set 'undefined-value'
+
+    result = postcss([plugin]).process(style)
+    expect(result.css).to.equal(answer)
+    # fn = -> postcss([plugin]).process(style)
+    # expect(fn).to.throw(ReferenceError)
