@@ -16,6 +16,7 @@ First, create `cssvars.cson`
 (e.g.)
 ```cson
 color: '#131313'
+background: '$color'
 ```
 
 Then, create `input.css`
@@ -23,6 +24,7 @@ Then, create `input.css`
 ```css
 body {
   color: $color;
+  background: $background;
 }
 ```
 
@@ -44,6 +46,7 @@ console.log(output);
  *
  *   body {
  *     color: #131313;
+ *     background: #131313;
  *   }
  */
 ```
