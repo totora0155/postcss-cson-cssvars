@@ -39,7 +39,7 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
 
       try
         result = followVar varname
-        if /^\$/.test result
+        while /^\$/.test result
           result = followVar result[1..]
       catch e
         console.error e.toString()
