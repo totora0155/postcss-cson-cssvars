@@ -1,7 +1,6 @@
 fs            = require 'fs'
 path          = require 'path'
 CSON          = require 'cson'
-colors        = require 'colors'
 postcss       = require 'postcss'
 
 csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
