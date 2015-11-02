@@ -33,17 +33,22 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
 
     result
 
+  handler = (m, varname) ->
+    result = null
+
+    try
+      result = followVar varname
+      while /^\$/.test result
+        result = followVar result[1..]
+    catch e
+      console.error e.toString()
+
+    result
+
   (css) ->
-    css.replaceValues /\$([^;]+)/, {fast: '$'}, (m, varname) ->
-      result = null
+    css.replaceValues /\$([^;]+)/, {fast: '$'}, handler
 
-      try
-        result = followVar varname
-        while /^\$/.test result
-          result = followVar result[1..]
-      catch e
-        console.error e.toString()
-
-      result
+    css.walkAtRules 'media', (rule) ->
+      rule.params = rule.params.replace /\$([^\)]+)/g, handler
 
 module.exports = csonCssvars

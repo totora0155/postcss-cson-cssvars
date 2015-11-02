@@ -52,5 +52,9 @@ describe 'postcss-cson-cssvars', ->
 
     result = postcss([plugin]).process(style)
     expect(result.css).to.equal(answer)
-    # fn = -> postcss([plugin]).process(style)
-    # expect(fn).to.throw(ReferenceError)
+
+  it 'expect replace media-value', ->
+    {style, plugin, answer} = set 'media-value'
+
+    result = postcss([plugin]).process(style)
+    expect(result.css).to.equal(answer)

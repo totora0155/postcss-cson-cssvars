@@ -1,0 +1,5 @@
+@media screen and (min-width: $min-width) and (max-width: $max-width) {
+  body {
+    color: #000;
+  }
+}
