@@ -75,6 +75,7 @@ console.log(output);
  *     font-size: 1.3rem;
  *     color: #91AD70;
  *     background: #f8f8f8;
+ *     background: #f8f8f8;
  *   }
  *
  *   h1 { font-size: 3.2rem; }
