@@ -21,11 +21,16 @@ color:
   base: '#f8f8f8'
   accent: '#91AD70'
 
+background: '$color.base'
+
 headline: [
   '3.2rem'
   '2.4rem'
   '2rem'
 ]
+
+'min-width': '600px'
+'max-width': '900px'
 
 ```
 
@@ -37,11 +42,16 @@ body {
 
   color: $color.accent;
   background: $color.base;
+  background: $background;
 }
 
 h1 { font-size: $headline[0]; }
 h2 { font-size: $headline[1]; }
 h3 { font-size: $headline[2]; }
+
+@media screen and (min-width: $min-width) and (max-width: $max-width) {
+  /*...*/
+}
 
 ```
 
@@ -66,9 +76,14 @@ console.log(output);
  *     color: #91AD70;
  *     background: #f8f8f8;
  *   }
+ *
  *   h1 { font-size: 3.2rem; }
  *   h2 { font-size: 2.4rem; }
  *   h3 { font-size: 2rem; }
+ *
+ *   @media screen and (min-width: 600px) and (max-width: 900px) {
+ *     ...
+ *   }
  *
  */
 ```
