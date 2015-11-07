@@ -2,6 +2,7 @@ fs            = require 'fs'
 path          = require 'path'
 CSON          = require 'cson'
 postcss       = require 'postcss'
+colors        = require 'colors'
 
 csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
   cwd = process.env.INIT_CWD || process.cwd()
@@ -14,6 +15,9 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
         str = fs.readFileSync opts.filepath, 'utf-8'
         CSON.parse str
     catch e
+      console.warn colors.red '[postcss-cson-cssvars]'
+      console.warn colors.red e.code + ':' if e.code?
+      console.warn colors.red "\t" + e.toString().match(/[^:]+$/)[0]
       {}
 
   followVar = (varname) ->
@@ -40,7 +44,8 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
       while /^\$/.test result
         result = followVar result[1..]
     catch e
-      console.error e.toString()
+      console.warn colors.red '[postcss-cson-cssvars]'
+      console.warn colors.red e.toString()
 
     result
 
