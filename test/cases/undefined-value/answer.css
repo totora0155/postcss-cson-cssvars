@@ -1,4 +1,4 @@
 body {
-  color: null;
-  background: null;
+  color: $color.test;
+  background: $background[2];
 }

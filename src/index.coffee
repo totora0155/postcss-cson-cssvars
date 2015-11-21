@@ -46,6 +46,7 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
     catch e
       console.warn colors.red '[postcss-cson-cssvars]'
       console.warn colors.red e.toString()
+      result = '$' + varname
 
     result
 
