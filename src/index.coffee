@@ -50,8 +50,12 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
     result
 
   (css) ->
-    css.replaceValues /\$([^;]+)/, {fast: '$'}, handler
+    value = css.nodes[0].nodes[0].value
 
+    if /\$("|'|;)/.test value
+      return value
+
+    css.replaceValues /\$([^;]+)/, {fast: '$'}, handler
     css.walkAtRules 'media', (rule) ->
       rule.params = rule.params.replace /\$([^\)]+)/g, handler
 

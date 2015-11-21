@@ -64,6 +64,11 @@
       return result;
     };
     return function(css) {
+      var value;
+      value = css.nodes[0].nodes[0].value;
+      if (/\$("|'|;)/.test(value)) {
+        return value;
+      }
       css.replaceValues(/\$([^;]+)/, {
         fast: '$'
       }, handler);

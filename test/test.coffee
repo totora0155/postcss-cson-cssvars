@@ -58,3 +58,9 @@ describe 'postcss-cson-cssvars', ->
 
     result = postcss([plugin]).process(style)
     expect(result.css).to.equal(answer)
+
+  it 'expect dont replace in the case $', ->
+    {style, plugin, answer} = set '$-only'
+
+    result = postcss([plugin]).process(style)
+    expect(result.css).to.equal(answer)
