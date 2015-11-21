@@ -51,6 +51,9 @@
     handler = function(m, varname) {
       var error, result;
       result = null;
+      if (/"|'/.test(varname)) {
+        return '$' + varname;
+      }
       try {
         result = followVar(varname);
         while (/^\$/.test(result)) {
@@ -65,11 +68,6 @@
       return result;
     };
     return function(css) {
-      var value;
-      value = css.nodes[0].nodes[0].value;
-      if (/\$("|'|;)/.test(value)) {
-        return value;
-      }
       css.replaceValues(/\$([^;]+)/, {
         fast: '$'
       }, handler);

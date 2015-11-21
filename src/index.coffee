@@ -39,6 +39,9 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
   handler = (m, varname) ->
     result = null
 
+    if /"|'/.test varname
+      return '$' + varname
+
     try
       result = followVar varname
       while /^\$/.test result
@@ -51,11 +54,6 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts) ->
     result
 
   (css) ->
-    value = css.nodes[0].nodes[0].value
-
-    if /\$("|'|;)/.test value
-      return value
-
     css.replaceValues /\$([^;]+)/, {fast: '$'}, handler
     css.walkAtRules 'media', (rule) ->
       rule.params = rule.params.replace /\$([^\)]+)/g, handler
