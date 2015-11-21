@@ -94,3 +94,7 @@ console.log(output);
 - `filepath`  
   For read cson file path (e.g.) `csonCssvar({filepath: './css/css-variable.cson'})`  
   By default, it is `./cssvars.cson`
+
+- `quiet`
+  Hide catch error.
+  By default, it is `false`
