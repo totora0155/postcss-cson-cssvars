@@ -1,0 +1,20 @@
+'font-size': '1.3rem'
+
+color:
+  base: '#f8f8f8'
+  accent: '#91AD70'
+
+background: '$color.base'
+
+pad:
+  vertical: '1em'
+  horizontal: '.5em'
+
+headline: [
+  '3.2rem'
+  '2.4rem'
+  '2rem'
+]
+
+'min-width': '600px'
+'max-width': '900px'
