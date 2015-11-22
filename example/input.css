@@ -10,6 +10,4 @@ h1 { font-size: $headline[0]; }
 h2 { font-size: $headline[1]; }
 h3 { font-size: $headline[2]; }
 
-@media screen and (min-width: $min-width) and (max-width: $max-width) {
-  /*...*/
-}
+@media screen and (min-width: $min-width) and (max-width: $max-width) {}
