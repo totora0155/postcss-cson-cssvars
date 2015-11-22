@@ -113,7 +113,7 @@ h3 { font-size: 2rem; }
 git clone git@github.com:totora0155/postcss-cson-cssvars.git
 ```
 
-**2** Change irectory & Install modules
+**2** Change directory & Install modules
 
 ```
 cd postcss-cson-cssvars && npm install --production
