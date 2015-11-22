@@ -1,0 +1,6 @@
+body {
+  padding: $pad.top $pad.right $pad.bottom $pad.left;
+  margin: 0;
+}
+
+@atrule $atrule.a $atrule.b;

@@ -16,6 +16,7 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts = {}) ->
   unless opts.quiet?
     opts.quiet = defs.quiet
 
+  # TODO: [SyntaxError: Syntax error on line undefined, column undefined: One top level value expected]
   vars =
     try
       do ->
@@ -28,43 +29,48 @@ csonCssvars = postcss.plugin 'postcss-cson-cssvars', (opts = {}) ->
         console.warn colors.red "\t" + e.toString().match(/[^:]+$/)[0]
       {}
 
-  followVar = (varname) ->
+  followProp = (prop) ->
     re = /[^\[\]\.]+/g
     result = vars
 
-    while (key = re.exec varname)?
+    while (key = re.exec prop)?
       result = result[key[0]]
 
     if not result? and not opts.quiet
       throw new ReferenceError """
 
-        \t#{varname} is not defined
+        \t#{prop} is not defined
 
       """
 
     result
 
-  handler = (m, varname) ->
-    result = null
+  createPropRe = (str) ->
+    new RegExp str.replace /(\$|\[|\])/g, "\\$1"
 
-    if /"|'/.test varname
-      return '$' + varname
+  handler = (matched) ->
+    re = /\$[^\s)]+/g
+    result = matched
 
-    try
-      result = followVar varname
-      while /^\$/.test result
-        result = followVar result[1..]
-    catch e
-      if not opts.quiet
-        console.warn colors.red '[postcss-cson-cssvars]'
-        console.warn colors.red e.toString()
-      result = '$' + varname
+    return matched if /"|'/.test matched
+
+    while (arg = re.exec matched)
+      prop = arg[0]
+      try
+        value = followProp prop[1..]
+        while /^\$/.test value
+          value = followProp value[1..]
+        result = result.replace createPropRe(prop), value
+      catch e
+        if not opts.quiet
+          console.warn colors.red '[postcss-cson-cssvars]'
+          console.warn colors.red e.toString()
+        return matched
 
     result
 
   (css) ->
-    css.replaceValues /\$([^;]+)/, {fast: '$'}, handler
-    css.walkAtRules 'media', (rule) ->
-      rule.params = rule.params.replace /\$([^\)]+)/g, handler
+    css.replaceValues /.+/, {fast: '$'}, handler
+    css.walkAtRules (rule) -> rule.params = handler rule.params
 
 module.exports = csonCssvars

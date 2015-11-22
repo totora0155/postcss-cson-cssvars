@@ -13,7 +13,7 @@
   colors = require('colors');
 
   csonCssvars = postcss.plugin('postcss-cson-cssvars', function(opts) {
-    var cwd, defs, e, followVar, handler, vars;
+    var createPropRe, cwd, defs, e, followProp, handler, vars;
     if (opts == null) {
       opts = {};
     }
@@ -48,45 +48,53 @@
         return {};
       }
     })();
-    followVar = function(varname) {
+    followProp = function(prop) {
       var key, re, result;
       re = /[^\[\]\.]+/g;
       result = vars;
-      while ((key = re.exec(varname)) != null) {
+      while ((key = re.exec(prop)) != null) {
         result = result[key[0]];
       }
       if ((result == null) && !opts.quiet) {
-        throw new ReferenceError("\n\t" + varname + " is not defined\n");
+        throw new ReferenceError("\n\t" + prop + " is not defined\n");
       }
       return result;
     };
-    handler = function(m, varname) {
-      var error, result;
-      result = null;
-      if (/"|'/.test(varname)) {
-        return '$' + varname;
+    createPropRe = function(str) {
+      return new RegExp(str.replace(/(\$|\[|\])/g, "\\$1"));
+    };
+    handler = function(matched) {
+      var arg, error, prop, re, result, value;
+      re = /\$[^\s)]+/g;
+      result = matched;
+      if (/"|'/.test(matched)) {
+        return matched;
       }
-      try {
-        result = followVar(varname);
-        while (/^\$/.test(result)) {
-          result = followVar(result.slice(1));
+      while ((arg = re.exec(matched))) {
+        prop = arg[0];
+        try {
+          value = followProp(prop.slice(1));
+          while (/^\$/.test(value)) {
+            value = followProp(value.slice(1));
+          }
+          result = result.replace(createPropRe(prop), value);
+        } catch (error) {
+          e = error;
+          if (!opts.quiet) {
+            console.warn(colors.red('[postcss-cson-cssvars]'));
+            console.warn(colors.red(e.toString()));
+          }
+          return matched;
         }
-      } catch (error) {
-        e = error;
-        if (!opts.quiet) {
-          console.warn(colors.red('[postcss-cson-cssvars]'));
-          console.warn(colors.red(e.toString()));
-        }
-        result = '$' + varname;
       }
       return result;
     };
     return function(css) {
-      css.replaceValues(/\$([^;]+)/, {
+      css.replaceValues(/.+/, {
         fast: '$'
       }, handler);
-      return css.walkAtRules('media', function(rule) {
-        return rule.params = rule.params.replace(/\$([^\)]+)/g, handler);
+      return css.walkAtRules(function(rule) {
+        return rule.params = handler(rule.params);
       });
     };
   });

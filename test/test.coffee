@@ -77,3 +77,9 @@ describe 'postcss-cson-cssvars', ->
 
     result = postcss([plugin]).process(style)
     expect(result.css).to.equal(answer)
+
+  it 'expect replace multi value', ->
+    {style, plugin, answer} = set 'multi-value'
+
+    result = postcss([plugin]).process(style)
+    expect(result.css).to.equal(answer)
